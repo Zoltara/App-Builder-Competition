@@ -158,13 +158,36 @@
         .spline-float-wrap::after {
             content: "";
             position: absolute;
-            right: 6px;
-            bottom: 6px;
-            width: 96px;
-            height: 24px;
-            border-radius: 12px;
-            background: radial-gradient(circle at 20% 20%, rgba(19, 19, 24, 0.95), rgba(19, 19, 24, 0.88));
+            left: 50%;
+            bottom: 10px;
+            transform: translateX(-50%);
+            width: 166px;
+            height: 44px;
+            border-radius: 999px;
+            background: rgba(8, 8, 10, 1);
             pointer-events: none;
+            z-index: 1;
+        }
+        .spline-float-wrap::before {
+            content: "Vibe Coding";
+            position: absolute;
+            left: 50%;
+            bottom: 22px;
+            transform: translateX(-50%);
+            color: #e4e1e9;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            pointer-events: none;
+            z-index: 2;
+            white-space: nowrap;
+        }
+        a[href*="spline.design/?utm_source=spline-viewer"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
         }
         @media (max-width: 1024px) {
             .spline-float-wrap {
@@ -181,10 +204,13 @@
                 opacity: 0.14;
             }
             .spline-float-wrap::after {
-                right: 4px;
-                bottom: 4px;
-                width: 80px;
-                height: 20px;
+                width: 114px;
+                height: 32px;
+                bottom: 6px;
+            }
+            .spline-float-wrap::before {
+                bottom: 15px;
+                font-size: 10px;
             }
         }
         @media (max-width: 640px) {
@@ -194,6 +220,15 @@
                 right: 8px;
                 bottom: 10px;
                 opacity: 0.6;
+            }
+            .spline-float-wrap::after {
+                width: 92px;
+                height: 26px;
+                bottom: 5px;
+            }
+            .spline-float-wrap::before {
+                bottom: 12px;
+                font-size: 9px;
             }
         }
     </style>
@@ -674,6 +709,33 @@
         });
 
         const splineFloat = document.getElementById('splineFloat');
+
+        function hideSplineBadge() {
+            const viewer = document.querySelector('spline-viewer');
+            if (!viewer || !viewer.shadowRoot) {
+                return;
+            }
+
+            const badgeLink = viewer.shadowRoot.querySelector('a[href*="spline.design"]');
+            if (!badgeLink) {
+                return;
+            }
+
+            badgeLink.style.setProperty('display', 'none', 'important');
+            badgeLink.style.setProperty('visibility', 'hidden', 'important');
+            badgeLink.style.setProperty('opacity', '0', 'important');
+            badgeLink.style.setProperty('pointer-events', 'none', 'important');
+            badgeLink.style.setProperty('width', '0', 'important');
+            badgeLink.style.setProperty('height', '0', 'important');
+            badgeLink.style.setProperty('overflow', 'hidden', 'important');
+        }
+
+        window.addEventListener('load', () => {
+            hideSplineBadge();
+
+            // Spline may re-render the watermark; keep it suppressed.
+            setInterval(hideSplineBadge, 250);
+        });
 
         function updateSplineVisibility() {
             if (!splineFloat) {
