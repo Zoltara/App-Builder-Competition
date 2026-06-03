@@ -3,10 +3,14 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>OWN THE CODE | Student App Builder Competition</title>
 <link href="icons/codex.png" rel="icon" type="image/png"/>
+<link href="https://cdn.tailwindcss.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
+    window.tailwind = window.tailwind || {};
       tailwind.config = {
         darkMode: "class",
         theme: {
@@ -565,6 +569,40 @@
 </div>
 </footer>
 <script>
+        function ensureTailwindLoaded() {
+            const probe = document.createElement('div');
+            probe.className = 'hidden';
+            probe.style.position = 'absolute';
+            probe.style.pointerEvents = 'none';
+            document.body.appendChild(probe);
+
+            const tailwindReady = window.getComputedStyle(probe).display === 'none';
+            probe.remove();
+
+            if (tailwindReady) {
+                sessionStorage.removeItem('otc-tailwind-reload-once');
+                return;
+            }
+
+            if (!document.querySelector('script[data-tailwind-recovery="true"]')) {
+                const recoveryScript = document.createElement('script');
+                recoveryScript.src = 'https://cdn.tailwindcss.com?plugins=forms,container-queries';
+                recoveryScript.dataset.tailwindRecovery = 'true';
+                document.head.appendChild(recoveryScript);
+            }
+
+            if (!sessionStorage.getItem('otc-tailwind-reload-once')) {
+                sessionStorage.setItem('otc-tailwind-reload-once', '1');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 600);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(ensureTailwindLoaded, 250);
+        });
+
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/REPLACE_WITH_YOUR_WEB_APP_ID/exec';
 
         // Micro-interaction for form focus
