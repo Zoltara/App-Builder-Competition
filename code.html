@@ -155,6 +155,17 @@
             overflow: hidden;
             background: transparent;
         }
+        .spline-float-wrap::after {
+            content: "";
+            position: absolute;
+            right: 6px;
+            bottom: 6px;
+            width: 96px;
+            height: 24px;
+            border-radius: 12px;
+            background: radial-gradient(circle at 20% 20%, rgba(19, 19, 24, 0.95), rgba(19, 19, 24, 0.88));
+            pointer-events: none;
+        }
         @media (max-width: 1024px) {
             .spline-float-wrap {
                 right: 10px;
@@ -168,6 +179,12 @@
             .spline-float-wrap.is-dimmed {
                 transform: scale(0.9);
                 opacity: 0.14;
+            }
+            .spline-float-wrap::after {
+                right: 4px;
+                bottom: 4px;
+                width: 80px;
+                height: 20px;
             }
         }
         @media (max-width: 640px) {
