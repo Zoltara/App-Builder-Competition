@@ -128,61 +128,7 @@
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-        .card-bg-overlay {
-            background: linear-gradient(to bottom, rgba(19, 19, 24, 0.6), rgba(19, 19, 24, 0.9));
-        }
-        .spline-float-wrap {
-            position: fixed;
-            right: clamp(8px, 2.5vw, 28px);
-            top: 58%;
-            width: clamp(170px, 18vw, 280x);
-            height: clamp(170px, 18vw, 280px);
-            transform: translateY(-50%);
-            z-index: 30;
-            pointer-events: none;
-            opacity: 0.92;
-            transition: transform 0.35s ease, opacity 0.35s ease;
-            filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.35));
-        }
-        .spline-float-wrap.is-dimmed {
-            opacity: 0.18;
-            transform: translateY(-50%) scale(0.82);
-        }
-        .spline-float-wrap spline-viewer {
-            width: 100%;
-            height: 100%;
-            border-radius: 20px;
-            overflow: hidden;
-            background: transparent;
-        }
-        .spline-float-wrap::after {
-            content: "";
-            position: absolute;
-            left: 50%;
-            bottom: 10px;
-            transform: translateX(-50%);
-            width: 300px;
-            height: 44px;
-            border-radius: 999px;
-            background: rgba(8, 8, 10, 1);
-            pointer-events: none;
-            z-index: 1;
-        }
-        .spline-float-wrap::before {
-            content: "Hello There";
-            position: absolute;
-            left: 50%;
-            bottom: 22px;
-            transform: translateX(-50%);
-            color: #e4e1e9;
-            font-family: "JetBrains Mono", monospace;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.04em;
-            pointer-events: none;
-            z-index: 2;
-            white-space: nowrap;
-        }
+        
         a[href*="spline.design/?utm_source=spline-viewer"] {
             display: none !important;
             visibility: hidden !important;
