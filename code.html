@@ -164,11 +164,12 @@
                 </a>
 </div>
 <div class="mt-10 rounded-2xl p-8 md:p-10 max-w-3xl mx-auto text-center border-2 border-primary/70 bg-gradient-to-r from-primary/10 via-secondary/15 to-tertiary-container/10 shadow-[0_0_35px_rgba(0,219,231,0.28)]">
-<p class="font-headline-md text-lg md:text-2xl text-on-surface"><span class="text-primary font-extrabold">Regstration End Date:</span> <span class="text-tertiary-container font-extrabold">23 June 2026</span></p>
-<p class="font-headline-md text-lg md:text-2xl text-on-surface mt-2"><span class="text-primary font-extrabold">Registration ends in:</span> <span class="text-secondary font-extrabold" id="registrationCountdown">Loading...</span></p>
-<p class="font-headline-md text-lg md:text-2xl text-on-surface mt-4"><span class="text-primary font-extrabold">App submission Date:</span> <span class="text-tertiary-container font-extrabold">18 August 2026</span></p>
-<p class="font-headline-md text-lg md:text-2xl text-on-surface mt-2"><span class="text-primary font-extrabold">App submission ends in:</span> <span class="text-secondary font-extrabold" id="submissionCountdown">Loading...</span></p>
-<p class="font-headline-md text-lg md:text-2xl text-on-surface mt-4"><span class="text-primary font-extrabold">Presentations Date:</span> <span class="text-tertiary-container font-extrabold">25 August 2026</span></p>
+<p class="font-headline-md text-lg md:text-2xl text-on-surface"><span class="text-[#3dd5ff] font-extrabold">Regstration End Date:</span> <span class="text-[#a6f2ff] font-extrabold">23 June 2026</span></p>
+<p class="font-headline-md text-lg md:text-2xl text-on-surface mt-2"><span class="text-[#3dd5ff] font-extrabold">Registration ends in:</span> <span class="text-[#7df9ff] font-extrabold" id="registrationCountdown">Loading...</span></p>
+<p class="font-headline-md text-lg md:text-2xl text-on-surface mt-4"><span class="text-[#c084ff] font-extrabold">App submission Date:</span> <span class="text-[#e8c9ff] font-extrabold">18 August 2026</span></p>
+<p class="font-headline-md text-lg md:text-2xl text-on-surface mt-4"><span class="text-[#52ff9a] font-extrabold">Presentations Date:</span> <span class="text-[#b8ffd8] font-extrabold">25 August 2026</span></p>
+<div class="h-5"></div>
+<p class="font-headline-md text-xl md:text-3xl font-extrabold text-[#ff5a67]" style="text-shadow: 0 0 8px rgba(255,90,103,0.8), 0 0 18px rgba(255,90,103,0.5);">Time Left to Register: <span id="registrationCountdownAlert">Loading...</span></p>
 </div>
 </div>
 <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
@@ -610,6 +611,7 @@
 
         const registrationCountdown = document.getElementById('registrationCountdown');
         const submissionCountdown = document.getElementById('submissionCountdown');
+        const registrationCountdownAlert = document.getElementById('registrationCountdownAlert');
         const registrationDeadline = new Date('2026-06-23T23:59:59+07:00');
         const submissionDeadline = new Date('2026-08-18T23:59:59+07:00');
 
@@ -630,8 +632,16 @@
         }
 
         function updateCountdowns() {
-            registrationCountdown.textContent = formatRemaining(registrationDeadline);
-            submissionCountdown.textContent = formatRemaining(submissionDeadline);
+            const registrationText = formatRemaining(registrationDeadline);
+            if (registrationCountdown) {
+                registrationCountdown.textContent = registrationText;
+            }
+            if (registrationCountdownAlert) {
+                registrationCountdownAlert.textContent = registrationText;
+            }
+            if (submissionCountdown) {
+                submissionCountdown.textContent = formatRemaining(submissionDeadline);
+            }
         }
 
         updateCountdowns();
