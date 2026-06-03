@@ -1,0 +1,620 @@
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OWN THE CODE | Student App Builder Competition</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#131318",
+                    "surface-container-highest": "#35343a",
+                    "inverse-surface": "#e4e1e9",
+                    "on-secondary-fixed-variant": "#74009f",
+                    "tertiary-container": "#00fd40",
+                    "secondary": "#ebb2ff",
+                    "on-secondary-fixed": "#320047",
+                    "error-container": "#93000a",
+                    "surface-container-high": "#2a292f",
+                    "secondary-container": "#ce5dff",
+                    "on-error": "#690005",
+                    "on-surface": "#e4e1e9",
+                    "outline": "#849495",
+                    "on-background": "#e4e1e9",
+                    "inverse-on-surface": "#303036",
+                    "on-tertiary-fixed": "#002203",
+                    "tertiary-fixed-dim": "#00e639",
+                    "surface-tint": "#00dbe7",
+                    "surface-variant": "#35343a",
+                    "surface-dim": "#131318",
+                    "surface-bright": "#39383e",
+                    "outline-variant": "#3a494b",
+                    "on-tertiary-container": "#007016",
+                    "tertiary-fixed": "#72ff70",
+                    "primary": "#e1fdff",
+                    "surface-container-low": "#1b1b20",
+                    "on-tertiary": "#003907",
+                    "surface-container-lowest": "#0e0e13",
+                    "on-primary-fixed": "#002022",
+                    "on-secondary": "#520071",
+                    "primary-container": "#00f2ff",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#004f54",
+                    "background": "#131318",
+                    "tertiary": "#e4ffdb",
+                    "on-tertiary-fixed-variant": "#00530e",
+                    "on-primary-container": "#006a71",
+                    "on-primary": "#00363a",
+                    "primary-fixed": "#74f5ff",
+                    "on-surface-variant": "#b9cacb",
+                    "secondary-fixed-dim": "#ebb2ff",
+                    "on-secondary-container": "#480064",
+                    "inverse-primary": "#00696f",
+                    "primary-fixed-dim": "#00dbe7",
+                    "error": "#ffb4ab"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "unit": "4px",
+                    "margin-desktop": "64px",
+                    "container-max": "1280px",
+                    "margin-mobile": "20px"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Sora"],
+                    "body-md": ["JetBrains Mono"],
+                    "headline-lg": ["Sora"],
+                    "headline-lg-mobile": ["Sora"],
+                    "body-lg": ["JetBrains Mono"],
+                    "label-sm": ["JetBrains Mono"],
+                    "headline-md": ["Sora"]
+            },
+            "fontSize": {
+                    "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #131318;
+            color: #e4e1e9;
+            scroll-behavior: smooth;
+        }
+        .glass-card {
+            background: rgba(31, 31, 37, 0.4);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(58, 73, 75, 0.5);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: #00dbe7;
+            box-shadow: 0 0 20px rgba(0, 219, 231, 0.15);
+        }
+        .glow-cyan {
+            text-shadow: 0 0 10px rgba(0, 219, 231, 0.5);
+        }
+        .border-glow-primary {
+            border: 1px solid transparent;
+            background: linear-gradient(#131318, #131318) padding-box,
+                        linear-gradient(to right, #00dbe7, #ce5dff) border-box;
+        }
+        .timeline-line {
+            background: linear-gradient(to bottom, #00dbe7, #ce5dff);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .card-bg-overlay {
+            background: linear-gradient(to bottom, rgba(19, 19, 24, 0.6), rgba(19, 19, 24, 0.9));
+        }
+    </style>
+</head>
+<body class="font-body-md overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant shadow-[0_0_15px_rgba(0,219,231,0.1)]">
+<nav class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-16">
+<div class="font-headline-md text-headline-md font-extrabold tracking-tighter text-primary"><img alt="OWN THE CODE Logo" class="h-10 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAK65pglEaN9EOt4LndNhDbGnUAZ1ncIrXKkHsEXwGxnKn3P_ajHQvTndgXrDCusAXGeX_hVFl8a9wFZaHq-vE2EbBgEWY6ukrC3WxvAGToVwLdi3VNGBVJ2g8FQUGT4onjh9Szi6p7H4z-p_nTuIgtvAj5L-XV9-JYrhsa6mn4vkUUg-_511r7GJrKftM0u841lEWFHUWImBuvFt738igCnBiLRiqZGtNKcxNDtiqG2XMxKqRx-Stt-cjgil1wnq4CB64SLr-BsA"/></div>
+<div class="hidden md:flex gap-8">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#brief">BRIEF</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#roadmap">ROADMAP</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#rubric">RUBRIC</a>
+<a class="font-label-sm text-label-sm text-primary border-b-2 border-primary pb-1" href="#register">REGISTER</a>
+</div>
+<div class="font-label-sm text-label-sm text-primary tracking-widest font-bold">COUNTDOWN: 14:02:55</div>
+</nav>
+</header>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0 overflow-hidden"><img alt="Tech Background" class="w-full h-full object-cover opacity-30 mix-blend-screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4T1UyRcPoHGYWQjLxlGs3jkFeufnx164bERes3BgTOBWUkH6wfn_RmlFnrgVmmIHShRFNf6wqQAaNGMTvB78hhlqn_8xHlWxnRrKiP3-Rm9kuStHzGX04GIcHyQ5_JebNcahwDnHaSZMlg47JhIT64bnU_-vfCRZeOa5I7_nWf5SlPLoK78IV_oHR8oHpSoh7FvcwB2KPcmCCth_GvXpJ0SFxm6Is5KY9llhrjs_DuwSVZkMH5P4q2f9P0A2j78hFaC8PEun6_w"/></div><div class="relative z-10 text-center px-gutter max-w-4xl">
+<h1 class="font-headline-xl text-headline-xl text-primary mb-6 glow-cyan tracking-tighter uppercase">
+                OWN THE CODE
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-2xl mx-auto">
+                Don't just use apps — Own them. A high-stakes problem-solving marathon for Grades 7–12 (M1-M6). Build the future, line by line.
+            </p>
+<div class="flex flex-col md:flex-row gap-6 justify-center">
+<a class="px-8 py-4 bg-primary text-on-primary font-bold rounded-lg hover:scale-105 transition-transform shadow-[0_0_20px_rgba(225,253,255,0.4)] flex items-center justify-center gap-2" href="#register">
+<span class="material-symbols-outlined">rocket_launch</span>
+                    Register Your Team
+                </a>
+<a class="px-8 py-4 border border-primary text-primary font-bold rounded-lg hover:bg-primary/10 transition-colors flex items-center justify-center gap-2" href="#brief">
+<span class="material-symbols-outlined">terminal</span>
+                    Read Brief
+                </a>
+</div>
+</div>
+<div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+<span class="material-symbols-outlined text-primary text-4xl">keyboard_double_arrow_down</span>
+</div>
+</section>
+<!-- Brief & Guidelines Section -->
+<section class="py-24 px-gutter max-w-container-max mx-auto" id="brief">
+<div class="mb-16">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2 flex items-center gap-3">
+<span class="material-symbols-outlined text-4xl">info</span>
+                COMPETITION BRIEF
+            </h2>
+<div class="h-1 w-24 bg-gradient-to-right from-primary to-secondary"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Eligibility Card -->
+<div class="relative overflow-hidden rounded-xl h-[280px] group">
+<img alt="Eligibility Background" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9wZwVD9ILrJPKCSEYwvn1Xt12T1_OprspLt16kVQZ5-ZQ2mbnQ_VfC_ZfXW1HtcX-tXLB81qkf7eY8NmOmYtHZtZZiTs9PVaJIZ6IOlHt1XzjGVPmbMxWyXkmaOwYfg8VKeQRYUxv8cgprIOlXV3IxqzaquNRSSrRF8OQQbld5Bheqo16a5f2htkw2P0ciLmN3g0Vfq08ws5yh3JbFv0gA3N1Msb9CwjOBJGHpOGiRNfO5TAuboTaj1YTqQb9mUTGehy-wUiRlw"/>
+<div class="absolute inset-0 card-bg-overlay p-8 flex flex-col justify-end backdrop-blur-[2px]">
+<h3 class="font-headline-md text-headline-md mb-2 text-primary">Eligibility</h3>
+<p class="font-body-md text-body-md text-on-surface">Grades 7–12 (M1-M6). Build solo or form a tactical squad of 1–3 members.</p>
+</div>
+</div>
+<!-- Scope Card -->
+<div class="relative overflow-hidden rounded-xl h-[280px] group">
+<img alt="Scope Background" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlYGq9OBReTn8Z_hfkYjd3mZksAC6cgnZVuqZ7yQyEl21fpuIRMYIunW3HGAxVAQ_1Z16rYdqYxxHVOlJZIfPqSc_bYlDH_c2c0Dok7Mpbg3WJv2lX27usW9NcxGTr0kWfcSBcm5lATZZsHXNKwb5D5Sokm6o0JfcQqQSjVLmZaKj7Hf_HysMONObUw1iYk27ht5VH2z_OgEPeSzuDjoB_NGFpRiAt8E3_w7VBGmpjmQSMjcm8isJetUzODW4eCwopnPhGU6z9zg"/>
+<div class="absolute inset-0 card-bg-overlay p-8 flex flex-col justify-end backdrop-blur-[2px]">
+<h3 class="font-headline-md text-headline-md mb-2 text-primary">Scope</h3>
+<p class="font-body-md text-body-md text-on-surface">Must be a working Web or Mobile App.</p>
+</div>
+</div>
+<!-- Theme Card -->
+<div class="relative overflow-hidden rounded-xl h-[280px] group">
+<img alt="Theme Background" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFzg7BOf1QdlbXGEN9YsvH_uHlK1XqRKVGkvPlb5LyQOm9GIpMJzqgyftUF9DXA-X4F3bHrhD0BkYlh_J7dhDvVRrXqxTYwNe2XWwBao3EFOpmwdw_TNkLnEvlV9eLOta4bwrYK-E8JGbyCEOwDQ9SL5YhV3negsec6JfIMqGjTei2eOPLmv9BMaJp93WYi0fcFziPvL9I3hxWlf_qM_Ax1wGyq13De4Es_K_2z8GNuSQCEYN7w4_ot0zVKIHMOOjUsB81ULa65w"/>
+<div class="absolute inset-0 card-bg-overlay p-8 flex flex-col justify-end backdrop-blur-[2px]">
+<h3 class="font-headline-md text-headline-md mb-2 text-primary">Theme</h3>
+<p class="font-body-md text-body-md text-on-surface">Solve a real-world problem in your School, Neighborhood, or Student Life.</p>
+</div>
+</div>
+<!-- Timeline Card -->
+<div class="relative overflow-hidden rounded-xl h-[280px] group">
+<img alt="Timeline Background" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLK1TGB8BGHZUJjBCnLeyLP02S0NuZUEN4QV4d94hfGGNw5DS_g79KnPL6_O8DeauOdofPyZDVlgG2Czv74db6Jo_IVos8xVBzbX05YY_nxIMsbVuo_EQ8CfsB31SM1gdvCTqkrC2Kc6UfkzkYeCTkAF7WvzN1xV2XPcdftMjwxj6tesD7tRo66ZxM1Og_3X5pRGh_3xvWhwMNFoeIa5LmnWSpPuWqgc1Dx55jlChAdI6qbzn2NRVIbCWlxUViSGebaWZpyMLlFg"/>
+<div class="absolute inset-0 card-bg-overlay p-8 flex flex-col justify-end backdrop-blur-[2px]">
+<h3 class="font-headline-md text-headline-md mb-2 text-primary">Timeline</h3>
+<p class="font-body-md text-body-md text-on-surface">Proposal due in 2 weeks. You have exactly 2 months to finalize the build.</p>
+</div>
+</div>
+</div>
+<div class="mt-12 glass-card p-8 rounded-xl flex flex-col md:flex-row items-center gap-8 border-glow-primary">
+<div class="flex-shrink-0 w-24 h-24 rounded-full overflow-hidden border-2 border-primary">
+<img alt="Teacher Rambo" class="w-full h-full object-cover" data-alt="A portrait of a tech-savvy instructor with a futuristic digital interface in the background. The man has a focused expression, wearing modern glasses and a dark hoodie. Neon cyan lighting highlights his features, creating a high-tech hacker-mentor aesthetic consistent with the 'Own the Code' competition theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEWZiRkZQSUNjMCk2f4Kc4YSBoDAv4dLLMXJovm04t8SYU163pXio0J7tZZvyCc8hsajRNwlS6BtIINHr3BZobjYP5JUaStDdRC33W8UfFmQ-9eBumhJLNIK8CqLgGqwGT-HQXoGYrKq5v-CP4EbfkwmfCmFBHWYTuqKId7uAsV1YfFmJ2fn5kJWvEbs_hwra8PDIljGOj9fnM5DuQ_mwH36mGhIAPFp-1uAc8HqGxKFWOZ0NUq_JjICJ_hUpOt_NNwAHXhYR76Q"/>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-primary mb-2">Technical Intel</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">
+<strong class="text-on-surface">Teacher Rambo</strong> is stationed at the terminal for Technical Support. 
+                    Available Monday to Friday, <span class="text-primary font-bold">08:30 — 16:00</span>.
+                </p>
+</div>
+</div>
+</section>
+<!-- Roadmap Section -->
+<section class="py-24 bg-surface-container-low" id="roadmap">
+<div class="px-gutter max-w-container-max mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg text-secondary mb-2 uppercase">The Roadmap</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant tracking-widest">MISSION MILESTONES</p>
+</div>
+<div class="relative max-w-3xl mx-auto px-4">
+<div class="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 timeline-line -translate-x-1/2"></div>
+<!-- Milestone 1 -->
+<div class="relative mb-16 flex flex-col md:flex-row items-center">
+<div class="hidden md:block w-1/2 pr-12 text-right">
+<h4 class="font-headline-md text-headline-md text-secondary">Week 2</h4>
+<p class="font-body-md text-on-surface-variant">Design Phase</p>
+</div>
+<div class="absolute left-8 md:left-1/2 w-6 h-6 bg-surface border-4 border-secondary rounded-full -translate-x-1/2 z-10"></div>
+<div class="w-full md:w-1/2 pl-16 md:pl-12">
+<div class="glass-card p-6 rounded-xl">
+<h5 class="font-bold text-primary mb-2">UI/UX Mockup</h5>
+<p class="font-body-md text-on-surface-variant text-sm">Submit wireframes and flowcharts. Define user journeys before touching any code.</p>
+</div>
+</div>
+</div>
+<!-- Milestone 2 -->
+<div class="relative mb-16 flex flex-col md:flex-row items-center">
+<div class="w-full md:w-1/2 pr-16 md:pr-12 md:text-right order-2 md:order-1">
+<div class="glass-card p-6 rounded-xl">
+<h5 class="font-bold text-primary mb-2">Core Logic/DB</h5>
+<p class="font-body-md text-on-surface-variant text-sm">Build the 'Happy Path'. Connect your databases and establish primary functions.</p>
+</div>
+</div>
+<div class="absolute left-8 md:left-1/2 w-6 h-6 bg-surface border-4 border-secondary rounded-full -translate-x-1/2 z-10 order-1 md:order-2"></div>
+<div class="hidden md:block w-1/2 pl-12 order-3">
+<h4 class="font-headline-md text-headline-md text-secondary">Week 4</h4>
+<p class="font-body-md text-on-surface-variant">Architecture Phase</p>
+</div>
+</div>
+<!-- Milestone 3 -->
+<div class="relative mb-16 flex flex-col md:flex-row items-center">
+<div class="hidden md:block w-1/2 pr-12 text-right">
+<h4 class="font-headline-md text-headline-md text-secondary">Week 6</h4>
+<p class="font-body-md text-on-surface-variant">Alpha Phase</p>
+</div>
+<div class="absolute left-8 md:left-1/2 w-6 h-6 bg-surface border-4 border-secondary rounded-full -translate-x-1/2 z-10"></div>
+<div class="w-full md:w-1/2 pl-16 md:pl-12">
+<div class="glass-card p-6 rounded-xl">
+<h5 class="font-bold text-primary mb-2">MVP Ready</h5>
+<p class="font-body-md text-on-surface-variant text-sm">Minimum Viable Product testing. Identification and patching of edge cases.</p>
+</div>
+</div>
+</div>
+<!-- Milestone 4 -->
+<div class="relative flex flex-col md:flex-row items-center">
+<div class="w-full md:w-1/2 pr-16 md:pr-12 md:text-right order-2 md:order-1">
+<div class="glass-card p-6 rounded-xl border-glow-primary">
+<h5 class="font-bold text-primary mb-2">Final Polish</h5>
+<p class="font-body-md text-on-surface-variant text-sm">Deployment and presentation prep. Smooth out animations and finalize assets.</p>
+</div>
+</div>
+<div class="absolute left-8 md:left-1/2 w-6 h-6 bg-surface border-4 border-secondary rounded-full -translate-x-1/2 z-10 order-1 md:order-2"></div>
+<div class="hidden md:block w-1/2 pl-12 order-3">
+<h4 class="font-headline-md text-headline-md text-secondary">Week 8</h4>
+<p class="font-body-md text-on-surface-variant">Deployment Phase</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Tools Section -->
+<section class="py-24 px-gutter max-w-container-max mx-auto overflow-hidden">
+<div class="flex flex-col md:flex-row items-center justify-between gap-12">
+<div class="w-full">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-6 text-center md:text-left">THE DEV STACK</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-12 text-center md:text-left max-w-3xl">
+                    Choose your weapons wisely. Our visual resource center connects you with the best-in-class tools for the mission.
+                </p>
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+<a class="glass-card p-6 rounded-xl flex flex-col items-center gap-4 hover:border-primary hover:bg-primary/5 transition-all group" href="https://www.glideapps.com" target="_blank">
+<div class="w-16 h-16 rounded-lg overflow-hidden border border-outline-variant group-hover:border-primary transition-colors">
+<img alt="Glide Apps" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAX8UqhCpjkhhQBNbWLAWSgreumrgM4Nu6Wu8X581rUlrMs55pOtwq33TlC4VyyiqReS48obgH6Wqg1dmJ2U5m2cuV3QUopCnHEHCsbxYSZ8_t6JN_NEZHOEX6t0YzPxE3zr8Tf4QNseKLF4TW2O_CweCdHtiWz_rNWlF5T0rBhmZA4-7NpjdKrhye-9oDhoge1gb82IPjcvwmzhB5Q4remPLaLW-bxU1yXquZrkghFIOyEe39mAPi9gVAlrkLSH6hSqRKa1sYCpg"/>
+</div>
+<span class="font-label-sm text-xs font-bold tracking-widest text-on-surface-variant group-hover:text-primary transition-colors">GLIDE APPS</span>
+</a>
+<a class="glass-card p-6 rounded-xl flex flex-col items-center gap-4 hover:border-primary hover:bg-primary/5 transition-all group" href="https://thunkable.com" target="_blank">
+<div class="w-16 h-16 rounded-lg overflow-hidden border border-outline-variant group-hover:border-primary transition-colors">
+<img alt="Thunkable" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgKIJK--dUQP3QUPUkS5ugsII9XGWAyMOOQyV0M4Q7-gOX5sWNcct2LeYMEUcnGqlBmlUB6OYpze0b1EUDZ-7zk8bmWmgbbEhd1iFeC-7WI8radj5NSWWOPFHSC6pO8LEM5lokfIv-DfWoYmfhB5TdS9_Gl3enxmZP0bGqVIJNri8AYahAprZYyEka4EzPA8negSPpnUvV_iJpRD0tlw8WBPo2EGvzV8BK8JBYyzlIE4d1pw8ltiv77MOXLwyf6jhM3W0skkszzA"/>
+</div>
+<span class="font-label-sm text-xs font-bold tracking-widest text-on-surface-variant group-hover:text-primary transition-colors">THUNKABLE</span>
+</a>
+<a class="glass-card p-6 rounded-xl flex flex-col items-center gap-4 hover:border-primary hover:bg-primary/5 transition-all group" href="https://code.visualstudio.com" target="_blank">
+<div class="w-16 h-16 rounded-lg overflow-hidden border border-outline-variant group-hover:border-primary transition-colors">
+<img alt="VS Code" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGbbmvJVOW_b1A0yBHkKu06bbBUoqJ_1d2Ggaro6WNmfF1v8ZzIWFpyZyE6NR3N6OunMnBkYkJY2doF4k0yt65RpNJKS2KjOScT7gkWmFdyW6mhkwDdmGGkhsDhbQ_LP-RoFJRSVGlS0sgipWuSradxPHx7pkZUUVK6FmMHJKe4ub6Aag3CL9dJjkmfSfqM0Bz-_cUBZ0Rd6fBFgfJzD_W0l0SxY15S_14VFPb5L8m-yJeR4fsXa-zz-jUPPvLO6d_9FLFNVK8hg"/>
+</div>
+<span class="font-label-sm text-xs font-bold tracking-widest text-on-surface-variant group-hover:text-primary transition-colors">VS CODE</span>
+</a>
+<a class="glass-card p-6 rounded-xl flex flex-col items-center gap-4 hover:border-primary hover:bg-primary/5 transition-all group" href="https://aistudio.google.com" target="_blank">
+<div class="w-16 h-16 rounded-lg overflow-hidden border border-outline-variant group-hover:border-primary transition-colors">
+<img alt="Google AI Studio" class="w-full h-full object-contain p-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdkZJCFLxu-bDFz-xh6Q1oVnj7dMljTUQxqJSxQ40QLalbi2dzCpc4jmW0w9Hbu2WjoYbnLOsNDFHqCUBx71GknUMp2bc08lG3mE-5ocPcucM_Cu115B9n6UJ4Y3dCwEmS4nw4KpdNM2EUyKqWeCJhS-XSx0umL63mp3JeBiS-2cxkTql80QQ68QRQLgVVYNxXZlfw8t3pvs4jvvAbD7BxfI7LZwBseosSj9YV1JNW5XfnzXv3YecrqW7aaoBy0y8xN1XICU8pEg"/>
+</div>
+<span class="font-label-sm text-xs font-bold tracking-widest text-on-surface-variant group-hover:text-primary transition-colors text-center">GOOGLE AI STUDIO</span>
+</a>
+<a class="glass-card p-6 rounded-xl flex flex-col items-center gap-4 hover:border-primary hover:bg-primary/5 transition-all group" href="https://claude.ai" target="_blank">
+<div class="w-16 h-16 rounded-lg overflow-hidden border border-outline-variant group-hover:border-primary transition-colors">
+<img alt="Claude" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAJbINB-_Tq3SFNGm5nKb6Bp9WBvDfXKJWULhUFv4bYq9izcE7xd4RNB5VfmD5lZlsvC4UTDfAUohs1xoKr3ACSn3NAvEXj4WdgEiPIJL_0sRo0ELb0L6KhH8f3aMrKP8yI8Hbxo3uOPW9J6zYyntMAxzaizKuCMZCRIQj45VF1G-VrUYUGePuzHejf0pn6aqm66-QZTr6O9e1sV1h2npSW415WZ0uKOaRBTPVgAMSiO-g7qJ8SF19m_NSmAAA8-WCI5Jq-k8Mjw"/>
+</div>
+<span class="font-label-sm text-xs font-bold tracking-widest text-on-surface-variant group-hover:text-primary transition-colors">CLAUDE CODE</span>
+</a>
+<a class="glass-card p-6 rounded-xl flex flex-col items-center gap-4 hover:border-primary hover:bg-primary/5 transition-all group" href="https://openai.com/blog/openai-codex" target="_blank">
+<div class="w-16 h-16 rounded-lg overflow-hidden border border-outline-variant group-hover:border-primary transition-colors">
+<img alt="Codex" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvoC0U0o6ruuh-6UGs_bEI7G7P_9W8-hNgv7i0G4xK7ds2_VM1t1pD7rCPzwsEdscHZdKLhxnewqhEIfTsGBovlEBP7TJf6Vg1W6XJGPBlMuw1VSjK14v0l4YIVXGBcH-n2fBezph9mlfsC3FcUVsz0OT46USMGcGpl6m5x11QzuMnP30tdB7hOh0xgpOpsXEgF6c_uk3vURLq17TQZJoSBPLxQalahUj9JPdThVUlDR0XMIr1cK4spQTAYfOf_OxSKl6RxX6GGQ"/>
+</div>
+<span class="font-label-sm text-xs font-bold tracking-widest text-on-surface-variant group-hover:text-primary transition-colors">CODEX</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Rubric Section -->
+<section class="py-24 bg-surface-container-lowest" id="rubric">
+<div class="px-gutter max-w-4xl mx-auto">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-12 text-center uppercase tracking-widest">Grading Rubric</h2>
+<div class="glass-card rounded-xl overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high border-b border-outline-variant">
+<th class="p-6 font-headline-md text-headline-md text-primary">Criteria</th>
+<th class="p-6 font-headline-md text-headline-md text-primary text-right">Points</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<tr class="hover:bg-white/5 transition-colors">
+<td class="p-6">
+<div class="font-bold mb-1">Functionality</div>
+<div class="text-sm text-on-surface-variant">Does the app work flawlessly without bugs?</div>
+</td>
+<td class="p-6 text-right font-headline-md text-secondary">40pts</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors">
+<td class="p-6">
+<div class="font-bold mb-1">Innovation</div>
+<div class="text-sm text-on-surface-variant">Unique solution to the defined problem?</div>
+</td>
+<td class="p-6 text-right font-headline-md text-secondary">20pts</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors">
+<td class="p-6">
+<div class="font-bold mb-1">UX (User Experience)</div>
+<div class="text-sm text-on-surface-variant">Intuitive design and visual polish.</div>
+</td>
+<td class="p-6 text-right font-headline-md text-secondary">15pts</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors">
+<td class="p-6">
+<div class="font-bold mb-1">Progress</div>
+<div class="text-sm text-on-surface-variant">Milestone consistency throughout the build.</div>
+</td>
+<td class="p-6 text-right font-headline-md text-secondary">15pts</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors">
+<td class="p-6">
+<div class="font-bold mb-1">Pitch/Demo</div>
+<div class="text-sm text-on-surface-variant">Clarity of final presentation.</div>
+</td>
+<td class="p-6 text-right font-headline-md text-secondary">10pts</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- Registration Form Section -->
+<section class="py-24 px-gutter max-w-container-max mx-auto" id="register">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+<div class="lg:col-span-1">
+<div class="sticky top-24">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-6 uppercase">Mission Entry</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8">
+                        Submit your project proposal below. All entries are reviewed by the dev-council.
+                    </p>
+<div class="bg-error/10 p-6 rounded-xl border-4 border-error mb-6 shadow-[0_0_30px_rgba(255,180,171,0.1)]">
+<div class="flex items-center gap-2 text-error font-extrabold mb-4 text-headline-md">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1">report</span>
+                            FORBIDDEN LIST
+                        </div>
+<ul class="text-sm text-on-surface font-bold list-disc list-inside space-y-2">
+<li class="">Gambling or Bet-simulators</li>
+<li class="">Basic Calculators (too simple)</li>
+<li class="">Theoretical apps with no logic</li>
+<li class="">Inappropriate student content</li>
+</ul>
+<div class="mt-4 pt-4 border-t border-error/30 text-xs text-error font-bold uppercase tracking-tighter">
+                            High Priority Warning: Failure to comply results in instant disqualification.
+                        </div>
+</div>
+<div class="glass-card p-6 rounded-xl border-l-4 border-secondary">
+<div class="flex items-center gap-2 text-secondary font-bold mb-2">
+<span class="material-symbols-outlined">security</span>
+                            SAFETY FIRST
+                        </div>
+<p class="text-sm text-on-surface-variant">
+                            Never include real sensitive student data (SSNs, private home addresses, or passwords) in your DB. Use mock data for testing.
+                        </p>
+</div>
+</div>
+</div>
+<div class="lg:col-span-2">
+<form class="glass-card p-8 md:p-12 rounded-2xl shadow-2xl" id="registrationForm">
+<div class="flex flex-col gap-2 mb-8">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Project Title</label>
+<input class="bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 text-on-surface py-3 px-4 transition-all" name="projectTitle" placeholder="e.g. Campus Connect" required="" type="text"/>
+</div>
+<div class="mb-12">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest block mb-4">Team Personnel</label>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+<!-- Member 1 -->
+<div class="flex flex-col gap-2">
+<label class="text-[10px] text-outline uppercase font-bold tracking-tighter">Member 1 Name</label>
+<input class="bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 text-on-surface py-3 px-4 transition-all text-sm" name="member1Name" placeholder="Full Name" required="" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[10px] text-outline uppercase font-bold tracking-tighter">Member 1 Class</label>
+<input class="bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 text-on-surface py-3 px-4 transition-all text-sm" name="member1Class" placeholder="e.g. M4/1" required="" type="text"/>
+</div>
+<!-- Member 2 -->
+<div class="flex flex-col gap-2">
+<label class="text-[10px] text-outline uppercase font-bold tracking-tighter">Member 2 Name (Optional)</label>
+<input class="bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 text-on-surface py-3 px-4 transition-all text-sm" name="member2Name" placeholder="Full Name" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[10px] text-outline uppercase font-bold tracking-tighter">Member 2 Class</label>
+<input class="bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 text-on-surface py-3 px-4 transition-all text-sm" name="member2Class" placeholder="e.g. M4/1" type="text"/>
+</div>
+<!-- Member 3 -->
+<div class="flex flex-col gap-2">
+<label class="text-[10px] text-outline uppercase font-bold tracking-tighter">Member 3 Name (Optional)</label>
+<input class="bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 text-on-surface py-3 px-4 transition-all text-sm" name="member3Name" placeholder="Full Name" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[10px] text-outline uppercase font-bold tracking-tighter">Member 3 Class</label>
+<input class="bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 text-on-surface py-3 px-4 transition-all text-sm" name="member3Class" placeholder="e.g. M4/1" type="text"/>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2 mb-8">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">The Problem</label>
+<textarea class="bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 text-on-surface py-3 px-4 transition-all resize-none" name="problem" placeholder="What specific problem are you addressing?" required="" rows="3"></textarea>
+</div>
+<div class="flex flex-col gap-2 mb-8">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">The Solution (2 Sentences)</label>
+<textarea class="bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 text-on-surface py-3 px-4 transition-all resize-none" name="solution" placeholder="How does your app solve it?" required="" rows="2"></textarea>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Target Platform</label>
+<select class="bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 text-on-surface py-3 px-4 transition-all appearance-none" name="targetPlatform" required="">
+<option value="web">Web App</option>
+<option value="ios">iOS Native</option>
+<option value="android">Android Native</option>
+<option value="pwa">Cross-Platform (PWA)</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">The MVP Feature</label>
+<p class="text-[10px] text-outline leading-tight mb-1">An MVP (Minimum Viable Product) is the most basic version of your app that still solves the core problem.</p>
+<input class="bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 text-on-surface py-3 px-4 transition-all" name="mvpFeature" placeholder="One essential feature" required="" type="text"/>
+</div>
+</div>
+<button class="w-full py-5 bg-primary text-on-primary font-extrabold uppercase tracking-widest rounded-lg hover:shadow-[0_0_30px_rgba(0,219,231,0.5)] active:scale-[0.98] transition-all" id="submitButton" type="submit">
+                        Initialize Submission
+                    </button>
+<p class="mt-4 text-sm text-on-surface-variant min-h-[1.25rem]" id="submitStatus" role="status" aria-live="polite"></p>
+</form>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center py-12 px-gutter max-w-container-max mx-auto gap-8">
+<div class="text-center md:text-left">
+<div class="font-headline-md text-headline-md text-on-surface mb-2 tracking-tighter"><img alt="OWN THE CODE Logo" class="h-12 w-auto mb-2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAK65pglEaN9EOt4LndNhDbGnUAZ1ncIrXKkHsEXwGxnKn3P_ajHQvTndgXrDCusAXGeX_hVFl8a9wFZaHq-vE2EbBgEWY6ukrC3WxvAGToVwLdi3VNGBVJ2g8FQUGT4onjh9Szi6p7H4z-p_nTuIgtvAj5L-XV9-JYrhsa6mn4vkUUg-_511r7GJrKftM0u841lEWFHUWImBuvFt738igCnBiLRiqZGtNKcxNDtiqG2XMxKqRx-Stt-cjgil1wnq4CB64SLr-BsA"/></div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">© 2024 OWN THE CODE TERMINAL. SECURED BY TEACHER RAMBO.</p>
+</div>
+<div class="flex gap-8">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-tertiary-fixed transition-colors" href="#">TECH SUPPORT</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-tertiary-fixed transition-colors" href="#">RULES</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-tertiary-fixed transition-colors" href="#">RESOURCES</a>
+</div>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:text-primary" href="#">
+<span class="material-symbols-outlined">terminal</span>
+</a>
+<a class="w-10 h-10 rounded-full glass-card flex items-center justify-center hover:text-primary" href="#">
+<span class="material-symbols-outlined">data_object</span>
+</a>
+</div>
+</div>
+</footer>
+<script>
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/REPLACE_WITH_YOUR_WEB_APP_ID/exec';
+
+        // Micro-interaction for form focus
+        const inputs = document.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.classList.add('scale-[1.02]');
+                input.parentElement.style.transition = 'transform 0.2s ease';
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.classList.remove('scale-[1.02]');
+            });
+        });
+
+        // Simple smooth scroll highlighting for nav
+        window.addEventListener('scroll', () => {
+            const sections = ['brief', 'roadmap', 'rubric', 'register'];
+            const navLinks = document.querySelectorAll('header nav div a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionEl = document.getElementById(section);
+                if (sectionEl) {
+                    const sectionTop = sectionEl.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = section;
+                    }
+                }
+            });
+
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    link.classList.remove('text-primary', 'border-b-2', 'border-primary', 'pb-1');
+                    link.classList.add('text-on-surface-variant');
+                    if (href.substring(1) === current) {
+                        link.classList.add('text-primary', 'border-b-2', 'border-primary', 'pb-1');
+                        link.classList.remove('text-on-surface-variant');
+                    }
+                }
+            });
+        });
+
+        const registrationForm = document.getElementById('registrationForm');
+        const submitButton = document.getElementById('submitButton');
+        const submitStatus = document.getElementById('submitStatus');
+
+        function setStatus(message, type) {
+            submitStatus.textContent = message;
+            submitStatus.classList.remove('text-error', 'text-tertiary-container', 'text-on-surface-variant');
+            if (type === 'error') {
+                submitStatus.classList.add('text-error');
+                return;
+            }
+            if (type === 'success') {
+                submitStatus.classList.add('text-tertiary-container');
+                return;
+            }
+            submitStatus.classList.add('text-on-surface-variant');
+        }
+
+        registrationForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            if (!GOOGLE_SCRIPT_URL.includes('/macros/s/') || GOOGLE_SCRIPT_URL.includes('REPLACE_WITH_YOUR_WEB_APP_ID')) {
+                setStatus('Connect your Google Apps Script Web App URL first, then submit again.', 'error');
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.classList.add('opacity-70', 'cursor-not-allowed');
+            setStatus('Submitting to command center...', 'info');
+
+            const formData = new FormData(registrationForm);
+            const payload = Object.fromEntries(formData.entries());
+            payload.submittedAt = new Date().toISOString();
+
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                registrationForm.reset();
+                setStatus('Submission received. Your data and timestamp were saved to Google Sheets.', 'success');
+            } catch (error) {
+                console.error('Submission failed:', error);
+                setStatus('Submission failed. Please check your Apps Script deployment and try again.', 'error');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.classList.remove('opacity-70', 'cursor-not-allowed');
+            }
+        });
+    </script>
+</body></html>
