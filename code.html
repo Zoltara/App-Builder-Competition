@@ -97,6 +97,7 @@
         },
       }
     </script>
+<script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.24/build/spline-viewer.js"></script>
 <style>
         body {
             background-color: #131318;
@@ -130,6 +131,54 @@
         .card-bg-overlay {
             background: linear-gradient(to bottom, rgba(19, 19, 24, 0.6), rgba(19, 19, 24, 0.9));
         }
+        .spline-float-wrap {
+            position: fixed;
+            right: clamp(8px, 2.5vw, 28px);
+            top: 58%;
+            width: clamp(170px, 18vw, 280px);
+            height: clamp(170px, 18vw, 280px);
+            transform: translateY(-50%);
+            z-index: 30;
+            pointer-events: none;
+            opacity: 0.92;
+            transition: transform 0.35s ease, opacity 0.35s ease;
+            filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.35));
+        }
+        .spline-float-wrap.is-dimmed {
+            opacity: 0.18;
+            transform: translateY(-50%) scale(0.82);
+        }
+        .spline-float-wrap spline-viewer {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            background: transparent;
+        }
+        @media (max-width: 1024px) {
+            .spline-float-wrap {
+                right: 10px;
+                top: auto;
+                bottom: 14px;
+                width: 128px;
+                height: 128px;
+                transform: none;
+                opacity: 0.72;
+            }
+            .spline-float-wrap.is-dimmed {
+                transform: scale(0.9);
+                opacity: 0.14;
+            }
+        }
+        @media (max-width: 640px) {
+            .spline-float-wrap {
+                width: 104px;
+                height: 104px;
+                right: 8px;
+                bottom: 10px;
+                opacity: 0.6;
+            }
+        }
     </style>
 </head>
 <body class="font-body-md overflow-x-hidden">
@@ -146,6 +195,9 @@
 <div class="w-24" aria-hidden="true"></div>
 </nav>
 </header>
+<div aria-hidden="true" class="spline-float-wrap" id="splineFloat">
+<spline-viewer loading-anim-type="spinner-small-dark" url="https://prod.spline.design/9gBigykqbUaZkbrx/scene.splinecode"></spline-viewer>
+</div>
 <!-- Hero Section -->
 <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
 <div class="absolute inset-0 z-0 overflow-hidden"><img alt="Tech Background" class="w-full h-full object-cover opacity-30 mix-blend-screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4T1UyRcPoHGYWQjLxlGs3jkFeufnx164bERes3BgTOBWUkH6wfn_RmlFnrgVmmIHShRFNf6wqQAaNGMTvB78hhlqn_8xHlWxnRrKiP3-Rm9kuStHzGX04GIcHyQ5_JebNcahwDnHaSZMlg47JhIT64bnU_-vfCRZeOa5I7_nWf5SlPLoK78IV_oHR8oHpSoh7FvcwB2KPcmCCth_GvXpJ0SFxm6Is5KY9llhrjs_DuwSVZkMH5P4q2f9P0A2j78hFaC8PEun6_w"/></div><div class="relative z-10 text-center px-gutter max-w-4xl">
@@ -603,6 +655,26 @@
         window.addEventListener('load', () => {
             setTimeout(ensureTailwindLoaded, 250);
         });
+
+        const splineFloat = document.getElementById('splineFloat');
+
+        function updateSplineVisibility() {
+            if (!splineFloat) {
+                return;
+            }
+
+            const protectedSections = [document.getElementById('register'), document.querySelector('footer')].filter(Boolean);
+            const shouldDim = protectedSections.some((section) => {
+                const rect = section.getBoundingClientRect();
+                return rect.top < window.innerHeight * 0.82 && rect.bottom > window.innerHeight * 0.18;
+            });
+
+            splineFloat.classList.toggle('is-dimmed', shouldDim);
+        }
+
+        window.addEventListener('scroll', updateSplineVisibility, { passive: true });
+        window.addEventListener('resize', updateSplineVisibility);
+        updateSplineVisibility();
 
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxJh0aA-NhjNzWaddydOL-XhOvgFUNVDN4ryFOq_1WMkjG6R4bMfsAF_NNb8UIO7rO4/exec';
 
