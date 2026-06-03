@@ -163,6 +163,11 @@
                     Read Brief
                 </a>
 </div>
+<div class="mt-8 glass-card rounded-xl p-5 max-w-2xl mx-auto text-left">
+<p class="font-label-sm text-sm text-on-surface"><span class="text-primary font-bold">Registration ends in:</span> <span id="registrationCountdown">Loading...</span></p>
+<p class="font-label-sm text-sm text-on-surface mt-2"><span class="text-primary font-bold">App submission in:</span> <span id="submissionCountdown">Loading...</span></p>
+<p class="font-label-sm text-sm text-on-surface mt-2"><span class="text-primary font-bold">Presentations date:</span> 4 August 2026</p>
+</div>
 </div>
 <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
 <span class="material-symbols-outlined text-primary text-4xl">keyboard_double_arrow_down</span>
@@ -298,7 +303,8 @@
 <div class="w-full">
 <h2 class="font-headline-lg text-headline-lg text-primary mb-6 text-center md:text-left">THE DEV STACK</h2>
 <p class="font-body-md text-body-md text-on-surface-variant mb-12 text-center md:text-left max-w-3xl">
-                    Choose your weapons wisely. Our visual resource center connects you with the best-in-class tools for the mission.
+                    Choose your weapons wisely. <br/>
+                    Our visual resource center connects you with the best-in-class tools for the mission.
                 </p>
 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
 <a class="glass-card p-6 rounded-xl flex flex-col items-center gap-4 hover:border-primary hover:bg-primary/5 transition-all group" href="https://www.glideapps.com" target="_blank">
@@ -554,6 +560,37 @@
                 }
             });
         });
+
+        const registrationCountdown = document.getElementById('registrationCountdown');
+        const submissionCountdown = document.getElementById('submissionCountdown');
+        const countdownStart = new Date();
+        const registrationDeadline = new Date(countdownStart.getTime() + (14 * 24 * 60 * 60 * 1000));
+        const submissionDeadline = new Date(countdownStart);
+        submissionDeadline.setMonth(submissionDeadline.getMonth() + 2);
+
+        function formatRemaining(targetDate) {
+            const diff = targetDate - new Date();
+
+            if (diff <= 0) {
+                return 'Closed';
+            }
+
+            const totalSeconds = Math.floor(diff / 1000);
+            const days = Math.floor(totalSeconds / 86400);
+            const hours = Math.floor((totalSeconds % 86400) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        function updateCountdowns() {
+            registrationCountdown.textContent = formatRemaining(registrationDeadline);
+            submissionCountdown.textContent = formatRemaining(submissionDeadline);
+        }
+
+        updateCountdowns();
+        setInterval(updateCountdowns, 1000);
 
         const registrationForm = document.getElementById('registrationForm');
         const submitButton = document.getElementById('submitButton');
