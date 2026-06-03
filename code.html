@@ -126,9 +126,25 @@
         .card-bg-overlay {
             background: linear-gradient(to bottom, rgba(19, 19, 24, 0.6), rgba(19, 19, 24, 0.9));
         }
+        #neuro-bg {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.35;
+            z-index: 0;
+        }
+        body > header,
+        body > section,
+        body > footer {
+            position: relative;
+            z-index: 1;
+        }
     </style>
 </head>
 <body class="font-body-md overflow-x-hidden">
+<canvas id="neuro-bg" aria-hidden="true"></canvas>
 <!-- Top Navigation Bar -->
 <header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant shadow-[0_0_15px_rgba(0,219,231,0.1)]">
 <nav class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-16">
@@ -679,5 +695,207 @@
                 submitButton.disabled = false;
             }
         });
+
+        function initNeuroBackground() {
+            const canvas = document.getElementById('neuro-bg');
+            const gl = canvas.getContext('webgl', { antialias: true, alpha: true });
+
+            if (!gl) {
+                return;
+            }
+
+            const vertexSource = `
+                attribute vec2 a_position;
+                varying vec2 vUv;
+
+                void main() {
+                    vUv = 0.5 * (a_position + 1.0);
+                    gl_Position = vec4(a_position, 0.0, 1.0);
+                }
+            `;
+
+            const fragmentSource = `
+                precision mediump float;
+
+                varying vec2 vUv;
+                uniform float u_time;
+                uniform float u_ratio;
+                uniform vec2 u_pointer_position;
+                uniform float u_scroll_progress;
+
+                mat2 rot(float a) {
+                    float s = sin(a);
+                    float c = cos(a);
+                    return mat2(c, -s, s, c);
+                }
+
+                float hash(vec2 p) {
+                    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+                }
+
+                float noise(vec2 p) {
+                    vec2 i = floor(p);
+                    vec2 f = fract(p);
+
+                    float a = hash(i);
+                    float b = hash(i + vec2(1.0, 0.0));
+                    float c = hash(i + vec2(0.0, 1.0));
+                    float d = hash(i + vec2(1.0, 1.0));
+
+                    vec2 u = f * f * (3.0 - 2.0 * f);
+
+                    return mix(a, b, u.x) +
+                           (c - a) * u.y * (1.0 - u.x) +
+                           (d - b) * u.x * u.y;
+                }
+
+                float fbm(vec2 p) {
+                    float value = 0.0;
+                    float amp = 0.5;
+
+                    for (int i = 0; i < 5; i++) {
+                        value += amp * noise(p);
+                        p = rot(0.6) * p * 2.0 + vec2(4.2, 2.8);
+                        amp *= 0.5;
+                    }
+
+                    return value;
+                }
+
+                void main() {
+                    vec2 uv = vUv - 0.5;
+                    uv.x *= u_ratio;
+
+                    vec2 pointerDrift = (u_pointer_position - 0.5) * vec2(0.8, -0.8);
+                    vec2 p = uv;
+                    p += 0.18 * vec2(sin(u_time * 0.35), cos(u_time * 0.27));
+                    p += pointerDrift * 0.24;
+                    p += vec2(0.0, u_scroll_progress * 0.4);
+
+                    float n1 = fbm(rot(0.9 + u_time * 0.03) * p * 3.6);
+                    float n2 = fbm(rot(-1.3) * p * 6.0 - u_time * 0.14);
+                    float n3 = fbm(p * 9.0 + u_time * 0.1);
+
+                    float glow = smoothstep(0.5, 1.0, n1 + n3 * 0.25);
+
+                    vec3 c1 = vec3(0.02, 0.20, 0.95);
+                    vec3 c2 = vec3(0.36, 0.08, 0.95);
+                    vec3 c3 = vec3(0.00, 0.92, 0.95);
+
+                    vec3 color = mix(c1, c2, n1);
+                    color = mix(color, c3, n2 * 0.7);
+                    color += glow * 0.22;
+
+                    float vignette = smoothstep(1.15, 0.15, length(uv));
+                    color *= vignette;
+
+                    gl_FragColor = vec4(color, 0.92);
+                }
+            `;
+
+            function createShader(type, source) {
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    console.error(gl.getShaderInfoLog(shader));
+                    gl.deleteShader(shader);
+                    return null;
+                }
+
+                return shader;
+            }
+
+            const vertexShader = createShader(gl.VERTEX_SHADER, vertexSource);
+            const fragmentShader = createShader(gl.FRAGMENT_SHADER, fragmentSource);
+
+            if (!vertexShader || !fragmentShader) {
+                return;
+            }
+
+            const program = gl.createProgram();
+            gl.attachShader(program, vertexShader);
+            gl.attachShader(program, fragmentShader);
+            gl.linkProgram(program);
+
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                console.error(gl.getProgramInfoLog(program));
+                return;
+            }
+
+            gl.useProgram(program);
+
+            const vertices = new Float32Array([
+                -1, -1,
+                 1, -1,
+                -1,  1,
+                -1,  1,
+                 1, -1,
+                 1,  1
+            ]);
+
+            const buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+            const positionLoc = gl.getAttribLocation(program, 'a_position');
+            gl.enableVertexAttribArray(positionLoc);
+            gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
+
+            const timeLoc = gl.getUniformLocation(program, 'u_time');
+            const ratioLoc = gl.getUniformLocation(program, 'u_ratio');
+            const pointerLoc = gl.getUniformLocation(program, 'u_pointer_position');
+            const scrollLoc = gl.getUniformLocation(program, 'u_scroll_progress');
+
+            const pointer = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
+
+            function resize() {
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                const w = Math.floor(window.innerWidth * dpr);
+                const h = Math.floor(window.innerHeight * dpr);
+
+                canvas.width = w;
+                canvas.height = h;
+                gl.viewport(0, 0, w, h);
+
+                gl.uniform1f(ratioLoc, w / h);
+            }
+
+            function updatePointer(clientX, clientY) {
+                pointer.tx = clientX / window.innerWidth;
+                pointer.ty = 1 - (clientY / window.innerHeight);
+            }
+
+            window.addEventListener('resize', resize);
+            window.addEventListener('mousemove', (event) => updatePointer(event.clientX, event.clientY));
+            window.addEventListener('touchmove', (event) => {
+                const touch = event.touches && event.touches[0];
+                if (touch) {
+                    updatePointer(touch.clientX, touch.clientY);
+                }
+            }, { passive: true });
+
+            resize();
+
+            function draw(timestamp) {
+                pointer.x += (pointer.tx - pointer.x) * 0.08;
+                pointer.y += (pointer.ty - pointer.y) * 0.08;
+
+                const scrollMax = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+                const scrollProgress = window.scrollY / scrollMax;
+
+                gl.uniform1f(timeLoc, timestamp * 0.001);
+                gl.uniform2f(pointerLoc, pointer.x, pointer.y);
+                gl.uniform1f(scrollLoc, scrollProgress);
+
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+                requestAnimationFrame(draw);
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        initNeuroBackground();
     </script>
 </body></html>
