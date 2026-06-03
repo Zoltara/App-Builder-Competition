@@ -132,7 +132,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            opacity: 0.35;
+            opacity: 0.62;
             z-index: 0;
         }
         body > header,
@@ -246,7 +246,7 @@
 </div>
 </section>
 <!-- Roadmap Section -->
-<section class="py-24 bg-surface-container-low" id="roadmap">
+<section class="py-24 bg-surface-container-low/70" id="roadmap">
 <div class="px-gutter max-w-container-max mx-auto">
 <div class="text-center mb-16">
 <h2 class="font-headline-lg text-headline-lg text-secondary mb-2 uppercase">The Roadmap</h2>
@@ -407,7 +407,7 @@
 </div>
 </section>
 <!-- Rubric Section -->
-<section class="py-24 bg-surface-container-lowest" id="rubric">
+<section class="py-24 bg-surface-container-lowest/70" id="rubric">
 <div class="px-gutter max-w-4xl mx-auto">
 <h2 class="font-headline-lg text-headline-lg mb-12 text-center uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-tertiary-container">Grading Rubric</h2>
 <div class="rounded-xl p-[1px] bg-gradient-to-r from-primary/70 via-secondary/80 to-tertiary-container/70 shadow-[0_0_35px_rgba(206,93,255,0.2)]">
@@ -570,7 +570,7 @@
 </div>
 </section>
 <!-- Footer -->
-<footer class="bg-surface-container-lowest border-t border-outline-variant">
+<footer class="bg-surface-container-lowest/70 border-t border-outline-variant">
 <div class="flex flex-col md:flex-row justify-between items-center py-12 px-gutter max-w-container-max mx-auto gap-8">
 <div class="w-full flex items-center justify-center md:justify-start gap-3 text-center md:text-left">
 <img alt="OWN THE CODE Logo" class="h-12 w-auto" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAK65pglEaN9EOt4LndNhDbGnUAZ1ncIrXKkHsEXwGxnKn3P_ajHQvTndgXrDCusAXGeX_hVFl8a9wFZaHq-vE2EbBgEWY6ukrC3WxvAGToVwLdi3VNGBVJ2g8FQUGT4onjh9Szi6p7H4z-p_nTuIgtvAj5L-XV9-JYrhsa6mn4vkUUg-_511r7GJrKftM0u841lEWFHUWImBuvFt738igCnBiLRiqZGtNKcxNDtiqG2XMxKqRx-Stt-cjgil1wnq4CB64SLr-BsA"/>
@@ -723,73 +723,72 @@
                 uniform vec2 u_pointer_position;
                 uniform float u_scroll_progress;
 
-                mat2 rot(float a) {
-                    float s = sin(a);
-                    float c = cos(a);
-                    return mat2(c, -s, s, c);
-                }
-
                 float hash(vec2 p) {
-                    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+                    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
                 }
 
                 float noise(vec2 p) {
                     vec2 i = floor(p);
                     vec2 f = fract(p);
-
                     float a = hash(i);
                     float b = hash(i + vec2(1.0, 0.0));
                     float c = hash(i + vec2(0.0, 1.0));
                     float d = hash(i + vec2(1.0, 1.0));
-
                     vec2 u = f * f * (3.0 - 2.0 * f);
-
-                    return mix(a, b, u.x) +
-                           (c - a) * u.y * (1.0 - u.x) +
-                           (d - b) * u.x * u.y;
+                    return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
                 }
 
                 float fbm(vec2 p) {
-                    float value = 0.0;
-                    float amp = 0.5;
-
-                    for (int i = 0; i < 5; i++) {
-                        value += amp * noise(p);
-                        p = rot(0.6) * p * 2.0 + vec2(4.2, 2.8);
-                        amp *= 0.5;
+                    float v = 0.0;
+                    float a = 0.5;
+                    for (int i = 0; i < 6; i++) {
+                        v += a * noise(p);
+                        p = p * 2.03 + vec2(4.0, 1.7);
+                        a *= 0.5;
                     }
+                    return v;
+                }
 
-                    return value;
+                float lightning(vec2 p, float t) {
+                    float streak = 0.0;
+                    for (int i = 0; i < 3; i++) {
+                        float fi = float(i);
+                        vec2 q = p * (2.5 + fi * 1.6);
+                        q.x += sin(t * (0.9 + fi * 0.3) + q.y * 2.7) * 0.35;
+                        q.y += cos(t * (0.7 + fi * 0.4) + q.x * 1.9) * 0.25;
+
+                        float band = abs(sin((q.x + fbm(q + t * 0.25)) * 8.0));
+                        float bolt = smoothstep(0.08, 0.0, band);
+                        streak += bolt / (1.0 + fi * 0.8);
+                    }
+                    return streak;
                 }
 
                 void main() {
                     vec2 uv = vUv - 0.5;
                     uv.x *= u_ratio;
 
-                    vec2 pointerDrift = (u_pointer_position - 0.5) * vec2(0.8, -0.8);
-                    vec2 p = uv;
-                    p += 0.18 * vec2(sin(u_time * 0.35), cos(u_time * 0.27));
-                    p += pointerDrift * 0.24;
-                    p += vec2(0.0, u_scroll_progress * 0.4);
+                    vec2 pointer = (u_pointer_position - 0.5) * vec2(1.2, -1.2);
+                    vec2 p = uv * 1.35 + pointer * 0.22;
+                    float t = u_time * 0.85 + u_scroll_progress * 3.0;
 
-                    float n1 = fbm(rot(0.9 + u_time * 0.03) * p * 3.6);
-                    float n2 = fbm(rot(-1.3) * p * 6.0 - u_time * 0.14);
-                    float n3 = fbm(p * 9.0 + u_time * 0.1);
+                    float bolts = lightning(p, t);
+                    float haze = fbm(p * 2.4 - t * 0.07) * 0.45;
+                    float pulse = 0.65 + 0.35 * sin(u_time * 2.2);
 
-                    float glow = smoothstep(0.5, 1.0, n1 + n3 * 0.25);
+                    vec3 deep = vec3(0.00, 0.03, 0.15);
+                    vec3 blue = vec3(0.04, 0.42, 1.0);
+                    vec3 cyan = vec3(0.10, 0.90, 1.0);
 
-                    vec3 c1 = vec3(0.02, 0.20, 0.95);
-                    vec3 c2 = vec3(0.36, 0.08, 0.95);
-                    vec3 c3 = vec3(0.00, 0.92, 0.95);
+                    vec3 color = deep;
+                    color += blue * (haze * 0.8);
+                    color += cyan * (bolts * pulse * 1.45);
+                    color += vec3(0.45, 0.72, 1.0) * smoothstep(0.45, 1.4, bolts) * 0.7;
 
-                    vec3 color = mix(c1, c2, n1);
-                    color = mix(color, c3, n2 * 0.7);
-                    color += glow * 0.22;
-
-                    float vignette = smoothstep(1.15, 0.15, length(uv));
+                    float vignette = smoothstep(1.35, 0.05, length(uv));
                     color *= vignette;
 
-                    gl_FragColor = vec4(color, 0.92);
+                    gl_FragColor = vec4(color, 0.98);
                 }
             `;
 
